@@ -179,5 +179,5 @@ export const INITIAL_AI_KNOWLEDGE = {
   title: "Digital Systems Engineer & Creative Technologist",
   focus: "Creative Digital Products, 3D WebGL Experiences, High-Performance Web Apps, and Visual Tooling.",
   tone: "Professional, futuristic, enthusiastic, concise, and helpful.",
-  customNotes: "Always highlight that free assets can be downloaded immediately with a single click. For paid assets, direct users to the secure checkout button. For bespoke contracts, advise them to use the Contact form or email abdullah@example.com."
+  customNotes: "Always highlight that free assets can be downloaded immediately with a single click. For paid assets, direct users to the secure checkout button. For bespoke contracts, advise them to use the Contact form or email m.abdullah79789@gmail.com."
 };

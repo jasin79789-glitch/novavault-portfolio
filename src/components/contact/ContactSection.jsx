@@ -66,7 +66,12 @@ export const ContactSection = () => {
                 </div>
                 <div>
                   <h4 className="font-display font-semibold text-white">Direct Dispatch</h4>
-                  <p className="text-sm text-gray-400 font-light">abdullah@example.com</p>
+                  <a
+                    href="mailto:m.abdullah79789@gmail.com"
+                    className="text-sm text-gray-400 hover:text-cyan-neon font-light transition-colors"
+                  >
+                    m.abdullah79789@gmail.com
+                  </a>
                   <p className="text-xs text-cyan-neon font-mono mt-1">Average Response: &lt; 24 Hours</p>
                 </div>
               </div>

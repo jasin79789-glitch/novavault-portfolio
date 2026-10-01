@@ -95,7 +95,7 @@ Strict Rules:
 
   // Match contact / hire
   if (q.includes('contact') || q.includes('hire') || q.includes('email') || q.includes('work') || q.includes('contract')) {
-    return `Muhammad Abdullah is currently open for select creative engineering contracts, 3D WebGL interfaces, and custom frontend systems. You can reach out directly using the **Contact & Inquiries** section at the bottom of the page, or by emailing **abdullah@example.com**!`;
+    return `Muhammad Abdullah is currently open for select creative engineering contracts, 3D WebGL interfaces, and custom frontend systems. You can reach out directly using the **Contact & Inquiries** section at the bottom of the page, or by emailing **m.abdullah79789@gmail.com**!`;
   }
 
   // Match skills / tech stack
