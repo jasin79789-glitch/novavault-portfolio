@@ -1,142 +1,160 @@
 import React, { useState, useEffect } from 'react';
-import { Bot, Shield, Sparkles, Terminal, Menu, X } from 'lucide-react';
+import { BrandLogo } from '../ui/BrandLogo';
+import { ArrowUpRight, Menu, X, Sparkles, Layers, User, Mail, Home } from 'lucide-react';
 
-export const Navbar = ({ onOpenAI, onGoAdmin }) => {
+export const Navbar = () => {
   const [scrolled, setScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [activeTab, setActiveTab] = useState('home');
 
   useEffect(() => {
     const handleScroll = () => {
-      setScrolled(window.scrollY > 20);
+      setScrolled(window.scrollY > 25);
+      
+      // Update active section on scroll
+      const sections = ['home', 'showcase', 'about', 'contact'];
+      for (const section of sections) {
+        const el = document.getElementById(section);
+        if (el) {
+          const rect = el.getBoundingClientRect();
+          if (rect.top <= 150 && rect.bottom >= 150) {
+            setActiveTab(section);
+            break;
+          }
+        }
+      }
     };
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
+  const scrollTo = (id) => {
+    setActiveTab(id);
+    setMobileMenuOpen(false);
+    const el = document.getElementById(id);
+    if (el) {
+      el.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
+
   return (
     <header
       className={`fixed top-0 left-0 right-0 z-40 transition-all duration-300 ${
-        scrolled
-          ? 'bg-[#0A0A0C]/85 backdrop-blur-xl border-b border-white/10 shadow-glass py-3.5'
-          : 'bg-transparent py-5'
+        scrolled ? 'py-3' : 'py-5'
       }`}
     >
       <div className="max-w-7xl mx-auto px-6 flex items-center justify-between">
-        {/* Brand Logo */}
-        <a href="#" className="flex items-center gap-3 group">
-          <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-cyan-neon/20 via-violet-neon/30 to-cyan-neon/40 border border-cyan-neon/40 flex items-center justify-center text-cyan-neon shadow-neon-cyan/20 group-hover:scale-105 transition-transform">
-            <svg
-              className="w-5 h-5 transition-transform group-hover:rotate-12"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2.2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            >
-              <polygon points="12 2 2 7 12 12 22 7 12 2" />
-              <polyline points="2 17 12 22 22 17" />
-              <polyline points="2 12 12 17 22 12" />
-            </svg>
-          </div>
-          <div>
-            <div className="flex items-center gap-1.5">
-              <span className="font-display font-black text-xl tracking-wider text-white">
-                NOVA<span className="text-cyan-neon">VAULT</span>
-              </span>
-              <span className="px-1.5 py-0.2 rounded text-[9px] font-mono bg-cyan-neon/20 text-cyan-neon border border-cyan-neon/30">
-                PRO
-              </span>
-            </div>
-            <p className="text-[10px] text-gray-400 font-mono tracking-widest uppercase">Digital Asset Lab</p>
-          </div>
-        </a>
+        {/* Brand Logo & Studio Identity (Enigma Style) */}
+        <div onClick={() => scrollTo('home')} className="cursor-pointer">
+          <BrandLogo subtitle="STUDIO • DIGITAL ENGINEERING" />
+        </div>
 
-        {/* Desktop Nav Links */}
-        <nav className="hidden md:flex items-center gap-8 text-xs font-mono text-gray-300">
-          <a href="#showcase" className="hover:text-cyan-neon transition-colors">
-            // SHOWCASE
-          </a>
-          <a href="#about" className="hover:text-cyan-neon transition-colors">
-            // CREATOR
-          </a>
-          <a href="#contact" className="hover:text-cyan-neon transition-colors">
-            // INQUIRIES
-          </a>
-        </nav>
-
-        {/* Action Triggers */}
-        <div className="hidden sm:flex items-center gap-3">
+        {/* Center Floating Pill Navigation Dock (Pin 1 Enigma Style) */}
+        <nav className="hidden md:flex items-center p-1.5 rounded-full bg-white/[0.04] backdrop-blur-2xl border border-white/10 shadow-[0_8px_30px_rgb(0,0,0,0.3)]">
           <button
-            onClick={onOpenAI}
-            className="px-3.5 py-1.5 rounded-xl glass-panel hover:glass-panel-hover border border-cyan-neon/30 text-xs font-mono text-white flex items-center gap-2 transition-all hover:scale-105"
+            onClick={() => scrollTo('home')}
+            className={`flex items-center gap-1.5 px-4 py-1.5 rounded-full text-xs font-medium transition-all ${
+              activeTab === 'home'
+                ? 'bg-white/15 text-white font-semibold shadow-inner-glass border border-white/15'
+                : 'text-gray-400 hover:text-white'
+            }`}
           >
-            <span className="w-2 h-2 rounded-full bg-cyan-neon animate-ping" />
-            <Bot className="w-4 h-4 text-cyan-neon" />
-            <span>AI Concierge</span>
+            <Home className="w-3.5 h-3.5" />
+            <span>Home</span>
           </button>
 
           <button
-            onClick={onGoAdmin}
-            className="p-2 rounded-xl glass-panel hover:bg-white/10 text-gray-400 hover:text-white transition-colors border border-white/10"
-            title="Admin Back-Office"
+            onClick={() => scrollTo('showcase')}
+            className={`flex items-center gap-1.5 px-4 py-1.5 rounded-full text-xs font-medium transition-all ${
+              activeTab === 'showcase'
+                ? 'bg-white/15 text-white font-semibold shadow-inner-glass border border-white/15'
+                : 'text-gray-400 hover:text-white'
+            }`}
           >
-            <Shield className="w-4 h-4" />
+            <Layers className="w-3.5 h-3.5" />
+            <span>Products & Work</span>
+          </button>
+
+          <button
+            onClick={() => scrollTo('about')}
+            className={`flex items-center gap-1.5 px-4 py-1.5 rounded-full text-xs font-medium transition-all ${
+              activeTab === 'about'
+                ? 'bg-white/15 text-white font-semibold shadow-inner-glass border border-white/15'
+                : 'text-gray-400 hover:text-white'
+            }`}
+          >
+            <User className="w-3.5 h-3.5" />
+            <span>Studio Bio</span>
+          </button>
+
+          <button
+            onClick={() => scrollTo('contact')}
+            className={`flex items-center gap-1.5 px-4 py-1.5 rounded-full text-xs font-medium transition-all ${
+              activeTab === 'contact'
+                ? 'bg-white/15 text-white font-semibold shadow-inner-glass border border-white/15'
+                : 'text-gray-400 hover:text-white'
+            }`}
+          >
+            <Mail className="w-3.5 h-3.5" />
+            <span>Inquiries</span>
+          </button>
+        </nav>
+
+        {/* Right Action Capsule CTA (Clean & Professional) */}
+        <div className="hidden md:flex items-center gap-3">
+          <button
+            onClick={() => scrollTo('contact')}
+            className="px-5 py-2.5 rounded-full bg-white text-black hover:bg-gray-100 font-semibold text-xs tracking-wide flex items-center gap-1.5 shadow-[0_0_20px_rgba(255,255,255,0.2)] transition-all hover:scale-105 active:scale-95"
+          >
+            <span>Get in Touch</span>
+            <ArrowUpRight className="w-3.5 h-3.5" />
           </button>
         </div>
 
-        {/* Mobile Menu Hamburger */}
+        {/* Mobile Hamburger Toggle */}
         <button
           onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-          className="p-2 rounded-xl glass-panel text-gray-400 hover:text-white md:hidden"
+          className="p-2.5 rounded-xl bg-white/5 border border-white/10 text-gray-300 hover:text-white md:hidden transition-colors"
+          aria-label="Toggle navigation menu"
         >
           {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
         </button>
       </div>
 
-      {/* Mobile Menu Drawer */}
+      {/* Mobile Drawer */}
       {mobileMenuOpen && (
-        <div className="md:hidden glass-panel border-b border-white/10 px-6 py-6 space-y-4 animate-in slide-in-from-top-3 duration-200">
-          <a
-            href="#showcase"
-            onClick={() => setMobileMenuOpen(false)}
-            className="block text-sm font-mono text-gray-300 hover:text-cyan-neon"
+        <div className="md:hidden mx-6 mt-3 p-5 rounded-2xl bg-[#0D0E12]/95 backdrop-blur-2xl border border-white/10 shadow-2xl space-y-3 animate-in fade-in zoom-in-95 duration-200">
+          <button
+            onClick={() => scrollTo('home')}
+            className="w-full text-left px-4 py-2.5 rounded-xl text-sm font-medium text-gray-300 hover:text-white hover:bg-white/5"
           >
-            // SHOWCASE
-          </a>
-          <a
-            href="#about"
-            onClick={() => setMobileMenuOpen(false)}
-            className="block text-sm font-mono text-gray-300 hover:text-cyan-neon"
+            Home
+          </button>
+          <button
+            onClick={() => scrollTo('showcase')}
+            className="w-full text-left px-4 py-2.5 rounded-xl text-sm font-medium text-gray-300 hover:text-white hover:bg-white/5"
           >
-            // CREATOR
-          </a>
-          <a
-            href="#contact"
-            onClick={() => setMobileMenuOpen(false)}
-            className="block text-sm font-mono text-gray-300 hover:text-cyan-neon"
+            Products & Work
+          </button>
+          <button
+            onClick={() => scrollTo('about')}
+            className="w-full text-left px-4 py-2.5 rounded-xl text-sm font-medium text-gray-300 hover:text-white hover:bg-white/5"
           >
-            // INQUIRIES
-          </a>
-          <div className="pt-4 border-t border-white/10 flex items-center gap-3">
+            Studio Bio
+          </button>
+          <button
+            onClick={() => scrollTo('contact')}
+            className="w-full text-left px-4 py-2.5 rounded-xl text-sm font-medium text-gray-300 hover:text-white hover:bg-white/5"
+          >
+            Inquiries
+          </button>
+          <div className="pt-2 border-t border-white/10">
             <button
-              onClick={() => {
-                setMobileMenuOpen(false);
-                onOpenAI();
-              }}
-              className="flex-1 py-2.5 rounded-xl bg-cyan-neon text-black font-bold text-xs font-mono flex items-center justify-center gap-2"
+              onClick={() => scrollTo('contact')}
+              className="w-full py-3 rounded-xl bg-white text-black font-bold text-xs flex items-center justify-center gap-2"
             >
-              <Bot className="w-4 h-4" />
-              <span>Ask AI Concierge</span>
-            </button>
-            <button
-              onClick={() => {
-                setMobileMenuOpen(false);
-                onGoAdmin();
-              }}
-              className="p-2.5 rounded-xl glass-panel text-white"
-            >
-              <Shield className="w-4 h-4" />
+              <span>Initiate Collaboration</span>
+              <ArrowUpRight className="w-4 h-4" />
             </button>
           </div>
         </div>

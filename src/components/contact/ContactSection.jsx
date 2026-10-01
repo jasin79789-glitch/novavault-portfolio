@@ -11,16 +11,44 @@ export const ContactSection = () => {
     message: ''
   });
   const [submitted, setSubmitted] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState('');
+
+  const sanitizeInput = (text) => {
+    if (!text) return '';
+    return text.replace(/[<>]/g, '').trim();
+  };
+
+  const isValidEmail = (email) => {
+    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+  };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (!formData.name.trim() || !formData.email.trim() || !formData.message.trim()) {
-      setError('Please complete all required fields.');
+    if (isSubmitting) return;
+
+    const cleanName = sanitizeInput(formData.name);
+    const cleanEmail = sanitizeInput(formData.email);
+    const cleanMessage = sanitizeInput(formData.message);
+
+    if (!cleanName || !cleanEmail || !cleanMessage) {
+      setError('Please complete all required fields with valid input.');
       return;
     }
 
-    storageAdapter.saveInquiry(formData);
+    if (!isValidEmail(cleanEmail)) {
+      setError('Please enter a valid email address.');
+      return;
+    }
+
+    setIsSubmitting(true);
+    storageAdapter.saveInquiry({
+      name: cleanName,
+      email: cleanEmail,
+      projectType: formData.projectType,
+      message: cleanMessage
+    });
+
     setSubmitted(true);
     setError('');
     setFormData({
@@ -32,7 +60,8 @@ export const ContactSection = () => {
 
     setTimeout(() => {
       setSubmitted(false);
-    }, 6000);
+      setIsSubmitting(false);
+    }, 5000);
   };
 
   return (

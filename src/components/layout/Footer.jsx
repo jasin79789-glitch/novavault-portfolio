@@ -24,7 +24,7 @@ export const Footer = ({ onGoAdmin }) => {
 
         <div className="flex items-center gap-6 text-xs font-mono text-gray-400">
           <a
-            href="https://github.com/nextlevelbuilder"
+            href="https://github.com/jasin79789-glitch/novavault-portfolio"
             target="_blank"
             rel="noreferrer"
             className="hover:text-cyan-neon transition-colors flex items-center gap-1.5"
@@ -33,12 +33,13 @@ export const Footer = ({ onGoAdmin }) => {
             <span>GitHub Repository</span>
           </a>
 
+          {/* Discreet studio status trigger (invisible to normal visitors, click 3 times or use #/admin) */}
           <button
             onClick={onGoAdmin}
-            className="hover:text-cyan-neon transition-colors flex items-center gap-1.5"
+            className="opacity-20 hover:opacity-100 transition-opacity p-1 text-gray-500 hover:text-cyan-neon"
+            title="Studio Portal"
           >
-            <Shield className="w-4 h-4" />
-            <span>Admin Console</span>
+            <Shield className="w-3 h-3" />
           </button>
 
           <button

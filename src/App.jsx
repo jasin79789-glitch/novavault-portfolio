@@ -2,9 +2,9 @@ import React, { useState, useEffect } from 'react';
 import { storageAdapter } from './services/storageAdapter';
 import { CustomCursor } from './components/ui/CustomCursor';
 import { Navbar } from './components/layout/Navbar';
+import { LeftUtilityDock } from './components/layout/LeftUtilityDock';
 import { HeroSection } from './components/hero/HeroSection';
-import { ProjectFilters } from './components/showcase/ProjectFilters';
-import { ProjectGrid } from './components/showcase/ProjectGrid';
+import { ProductSpotlight } from './components/showcase/ProductSpotlight';
 import { ProjectDetailModal } from './components/showcase/ProjectDetailModal';
 import { AIConcierge } from './components/ai/AIConcierge';
 import { CreatorSection } from './components/home/CreatorSection';
@@ -12,17 +12,11 @@ import { ContactSection } from './components/contact/ContactSection';
 import { Footer } from './components/layout/Footer';
 import { AdminLogin } from './components/admin/AdminLogin';
 import { AdminPortal } from './components/admin/AdminPortal';
-import { Sparkles } from 'lucide-react';
 
 export function App() {
   const [currentRoute, setCurrentRoute] = useState(window.location.hash || '');
   const [isAdminAuthenticated, setIsAdminAuthenticated] = useState(storageAdapter.getAdminAuth());
   const [projects, setProjects] = useState(storageAdapter.getProjects());
-
-  // Filter States
-  const [activeCategory, setActiveCategory] = useState('All');
-  const [searchQuery, setSearchQuery] = useState('');
-  const [priceFilter, setPriceFilter] = useState('all'); // 'all' | 'free' | 'paid'
 
   // Modal & AI States
   const [selectedProject, setSelectedProject] = useState(null);
@@ -46,32 +40,6 @@ export function App() {
     window.addEventListener('novavault:store_update', handleStoreUpdate);
     return () => window.removeEventListener('novavault:store_update', handleStoreUpdate);
   }, []);
-
-  // Filter projects logic
-  const filteredProjects = projects.filter((project) => {
-    // 1. Category Filter
-    if (activeCategory !== 'All' && project.category !== activeCategory) {
-      return false;
-    }
-
-    // 2. Price Filter
-    if (priceFilter === 'free' && project.is_paid) return false;
-    if (priceFilter === 'paid' && !project.is_paid) return false;
-
-    // 3. Search Query
-    if (searchQuery.trim()) {
-      const q = searchQuery.toLowerCase();
-      const matchTitle = project.title.toLowerCase().includes(q);
-      const matchTagline = (project.tagline || '').toLowerCase().includes(q);
-      const matchDesc = (project.description || '').toLowerCase().includes(q);
-      const matchTags = (project.tags || []).some((t) => t.toLowerCase().includes(q));
-      if (!matchTitle && !matchTagline && !matchDesc && !matchTags) {
-        return false;
-      }
-    }
-
-    return true;
-  });
 
   const handleGoAdmin = () => {
     window.location.hash = '/admin';
@@ -121,48 +89,20 @@ export function App() {
       {/* Interactive Magnetic Glowing Cursor */}
       <CustomCursor />
 
-      {/* Main Top Navigation */}
-      <Navbar onOpenAI={() => setIsAIOpen(true)} onGoAdmin={handleGoAdmin} />
+      {/* Pin 1 Enigma Vertical Left Utility Dock */}
+      <LeftUtilityDock onGoAdmin={handleGoAdmin} />
 
-      {/* 3D WebGL Interactive Hero */}
-      <HeroSection
-        onOpenAI={() => setIsAIOpen(true)}
-        onExplore={() => scrollToSection('showcase')}
+      {/* Main Top Navigation (Pin 1 Floating Pill Dock - No Public Admin/AI Buttons) */}
+      <Navbar />
+
+      {/* 3D WebGL Interactive Hero (Pin 1 Asymmetric Bento Layout) */}
+      <HeroSection onExplore={() => scrollToSection('showcase')} />
+
+      {/* Pin 2 DualSense Interactive 3D Product Spotlight & Releases */}
+      <ProductSpotlight
+        projects={projects}
+        onInspect={(project) => setSelectedProject(project)}
       />
-
-      {/* Dynamic Project Showcase Section */}
-      <section id="showcase" className="py-20 relative max-w-7xl mx-auto px-6">
-        <div className="text-center max-w-3xl mx-auto mb-12">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-mono bg-white/5 border border-white/10 text-cyan-neon mb-4">
-            <Sparkles className="w-3.5 h-3.5" />
-            <span>CURATED DIGITAL ASSETS</span>
-          </div>
-          <h2 className="font-display font-black text-3xl sm:text-5xl text-white mb-4">
-            Interactive Work & <span className="bg-gradient-to-r from-cyan-neon to-violet-electric bg-clip-text text-transparent">Releases</span>
-          </h2>
-          <p className="text-gray-400 font-light text-sm sm:text-base leading-relaxed">
-            Download production-ready source bundles, inspect interactive 3D WebGL engines,
-            and acquire premium engineering blueprints with direct browser downloads.
-          </p>
-        </div>
-
-        {/* Filter Bar */}
-        <ProjectFilters
-          activeCategory={activeCategory}
-          onSelectCategory={setActiveCategory}
-          searchQuery={searchQuery}
-          onSearchChange={setSearchQuery}
-          priceFilter={priceFilter}
-          onPriceFilterChange={setPriceFilter}
-          totalResults={filteredProjects.length}
-        />
-
-        {/* Grid of 3D Tilt Cards */}
-        <ProjectGrid
-          projects={filteredProjects}
-          onInspect={(project) => setSelectedProject(project)}
-        />
-      </section>
 
       {/* Creator & Philosophy Section */}
       <CreatorSection />
